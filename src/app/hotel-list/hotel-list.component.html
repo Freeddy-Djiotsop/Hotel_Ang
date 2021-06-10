@@ -1,0 +1,45 @@
+<div class="container">
+    <h2 *ngIf="hotels && hotels.length>0">{{title}}</h2>
+    <button class="btn btn-secondary d-flex " (click)="toggleIsNewBadge()">
+        <span class="material-icons">
+            {{showBadge ? 'visibility_off' : 'visibility'}}
+        </span>
+        <span class="ml-2">
+            Neuigkeiten {{showBadge ? 'ausblenden' : 'einblenden'}}
+        </span>
+    </button>
+    <hr>
+    <div class="my-2">
+        <div class="row">
+            <div class="col-md-4">
+                <span class="filter">Aktueller Filter: </span>
+                <b>{{hotelFilter}}</b>
+            </div>
+            <div class="col-md-8 form-group">
+                <!-- ces 2 lignes sont identique, sauf que l'autre est comme une lambda expression -->
+                <input type="text" class="form-control" [(ngModel)]="hotelFilter">
+                <!-- <input type="text" class="form-control" [ngModel]="hotelFilter" (ngModelChange)="hotelFilter = $event"> -->
+            </div>
+        </div>
+    </div>
+    <div class="alert alert-primary" *ngIf="!!receivedRating">
+        {{receivedRating}}
+    </div>
+    <div class="row row-cols-1 row-cols-md-3">
+        <div class="col mb-4" *ngFor="let hotel of filteredHotels">
+          <div class="card">
+            <img [src]="hotel.imageUrl" [title]="hotel.hotelName | uppercase" class="card-img-top" [alt]="hotel.hotelName">
+            <div class="card-body">
+              <h5 class="card-title">{{hotel.hotelName | titlecase}}</h5>
+              <p class="card-text">
+                  {{hotel.beschreibung}}
+              </p>
+              <p class="card-text">
+                  {{hotel.preis | currency : 'EUR' : 'symbol' : '1.2-2' : 'de'| replaceComma}}
+              </p>
+              <app-star-rating [rating]="hotel.rating" (starRatingClicked)="receiveRatingClicked($event)"></app-star-rating> <!--c le tonton ci qui affiche les etoiles -->
+              <span class="badge badge-pill badge-info" *ngIf="showBadge">Neuigkeit</span>
+            </div>
+          </div>
+        </div>
+</div>
